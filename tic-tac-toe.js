@@ -1,32 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const board = document.getElementById("board")
 	const squares = document.querySelectorAll("#board div");
-	squares.foreach(square => square.classList.add("square"));
-});
+	const Status = document.getElementById("status");
+	const gameSate = Array(9).fill(null);
+	let player = "X";
+	squares.forEach(square => square.classList.add("square"));
 
-let player = "X";
-const gameSate = Array(9).fill(null);
-
-document.querySelectorAll("#board div").forEachach((square, index) => {
-	square.addEventListener("click", () => {
-		if (!gameSate[index]) {
-			gameState[index] = player;
-			square.textContent = player;
-			square.classList.add(player);
-			
-			player = player === "X" ? "O" : "X";
-		}
-	});
-});
-
-document.querySelectorAll("#board div").forEach(square => {
-	square.addEventListener("mouseover", () => square.classList.add("hover"));
-	square.addEventListener("mouseleave", () => square.classList.remove("hover"));
-});
-
-const status = document.getElementById("status");
-
-const checkWinner = () => {
+	//const checkWinner = () => {
 	const winningConditions = [
 		[0,1,2],
 		[3,4,5],
@@ -37,25 +16,42 @@ const checkWinner = () => {
 		[0.4.8],
 		[2,4,6]
 	];
-	
+	const checkWinner = () => {
 	for (const [a,b,c] of winningConditions) {
 		if (gameState[a] && gameState[a] === gamState[b] && gameState[a] === gameState[c]) {
-			status.textContent = 'Congratulations! ${gameState[a]} is the winner!';
-			status.classList.add(you-won");
+			Status.textContent = 'Congratulations! ${gameState[a]} is the winner!';
+			Status.classList.add("you-won");
 			return true;
 		}
 	}
 	return false;
-};
+	};
 
-document.querySelectorAll("#board div").forEach((square, index) => {
-	square.addEventListener("click", () => {
-		if (!gameSate[index]) {
-			gameState[index] = player;
-			square.textContent = player;
-			square.classList.add(player);
-			
-			player = player === "X" ? "O" : "X";
-		}
+	squares.forEach((square, index) => {
+		square.addEventListener("click", () => {
+			if (!gameSate[index] && !checkWinner) {
+				gameState[index] = player;
+				square.textContent = player;
+				square.classList.add(player);
+				
+				if (checkWinner()) return;
+				
+				player = player === "X" ? "O" : "X";
+			}
+		});
+		
+		square.addEventListener("mouseover", () => square.classList.add("hover"));
+		square.addEventListener("mouseleave", () => square.classList.remove("hover"));
+	});
+
+	document.querySelector(".New-Game").addEventListener("click", () => {
+		gameState.fill(null);
+		squares.forEach(square => {
+			square.textContent = "";
+			square.classList.remove("X", "O");
+		});
+		Status.textContent = "New Game";
+		Status.classList.remove("you-won");
+		player = "X";
 	});
 });
